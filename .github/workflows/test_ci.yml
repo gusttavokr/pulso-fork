@@ -1,0 +1,42 @@
+name: ⚙️ Pulso Backend CI - Build & Test
+
+on:
+  push:
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  testes-backend:
+    name: 🧪 Testes
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java-version: [21.x]
+
+    defaults:
+      run:
+        working-directory: backend/pulso
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: 'backend/pulso/pom.xml'
+
+      - name: Set Docker permissions
+        run: |
+          sudo chmod 666 /var/run/docker.sock
+          docker info
+
+      - name: Build and Test with Maven
+        run: mvn -B clean package
+        env:
+          TESTCONTAINERS_RYUK_DISABLED: false
+          

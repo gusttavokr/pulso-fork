@@ -1,0 +1,73 @@
+<div class="mb-6 mt-4 font-normal text-[#A3A3A3]">
+
+    <p-breadcrumb [model]="items" [home]="home" styleClass="bg-[#F6F8FE] p-0 " />
+
+</div>
+
+<div class="mb-6 flex items-center gap-4">
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#020035" viewBox="0 0 256 256">
+        <path
+            d="M208,32H184V24a8,8,0,0,0-16,0v8H136V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48a8,8,0,0,0-8,8V200a32,32,0,0,0,32,32H184a32,32,0,0,0,32-32V40A8,8,0,0,0,208,32ZM120,56a8,8,0,0,1,16,0v8a8,8,0,0,1-16,0ZM80,72a8,8,0,0,1-8-8V56a8,8,0,0,1,16,0v8A8,8,0,0,1,80,72Zm80,96H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm24-72a8,8,0,0,1-16,0V56a8,8,0,0,1,16,0Z">
+        </path>
+    </svg>
+
+    <p class="text-3xl font-bold text-[#020035]">Minhas escalas</p>
+
+</div>
+
+<div class="flex gap-6 items-start max-w-300 mr-4 relative">
+
+    <div class="flex-1">
+
+        <div class="flex gap-3">
+            <div class="flex-1">
+                <app-pesquisa></app-pesquisa>
+            </div>
+
+            @if (authService.isLiderEscala) {
+            <app-button (click)="abrirCriarModal()" label="Criar nova escala" variant="confirmacao" [svgIcon]="svg"
+                [iconSize]="26" />
+            }
+
+        </div>
+
+        <div class="flex flex-col gap-5 min-h-[60vh] mb-10">
+
+            @for (escala of escalas(); track escala.id) {
+            <app-card-escala [escala]="escala" (remover)="confirmarRemocao(escala)" />
+            } @empty {
+            <div class="flex flex-col justify-center items-center text-center flex-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none"
+                    stroke="#848484" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-frown-icon lucide-frown">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M16 16s-1.5-2-4-2-4 2-4 2" />
+                    <line x1="9" x2="9.01" y1="9" y2="9" />
+                    <line x1="15" x2="15.01" y1="9" y2="9" />
+                </svg>
+                <p class="text-gray-500 mt-2">Nenhum encontrado.</p>
+            </div>
+            }
+
+        </div>
+
+    </div>
+
+    <app-filtros [contexto]="filtroContexto.MINHAS_ESCALAS" (escalasFiltradas)="onFiltrosEscala($event)" />
+
+</div>
+
+<app-criar-escala-modal [visible]="showCriarModal()" (closed)="fecharCriarModal()" (created)="onEscalaCriada($event)"
+    (error)="onErroCriacao()"></app-criar-escala-modal>
+
+<app-feedback-modal [visible]="showSuccess()" type="success" modalTitle="Escala criada com sucesso!"
+    message="Prossiga para detalhar a escala criada." primaryLabel="Detalhar escala" secondaryLabel="Página inicial"
+    [primarySvg]="svg2" [secondarySvg]="svg3" [animateIcon]="false" (primaryClick)="irPraEscala()"
+    (secondaryClick)="irParaHome()" (closed)="fecharFeedback()">
+</app-feedback-modal>
+
+<app-feedback-modal [visible]="showError()" type="error" modalTitle="Erro ao criar escala"
+    message="Tente novamente mais tarde." subMessage="Se o problema persistir, entre em contato com o suporte."
+    primaryLabel="Fechar" [primarySvg]="svg2" (primaryClick)="fecharFeedback()" (closed)="fecharFeedback()">
+</app-feedback-modal>

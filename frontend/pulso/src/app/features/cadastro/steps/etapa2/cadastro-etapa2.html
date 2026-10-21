@@ -1,0 +1,197 @@
+<form [formGroup]="form" class="flex flex-col gap-5">
+
+    <!-- ================= NOME + EMAIL ================= -->
+    <div class="flex gap-4">
+
+        @if (tipoUsuario === 'profissional') {
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">Nome</label>
+
+            <input pInputText type="text" formControlName="nome" placeholder="Digite seu nome completo" />
+
+            @if (f.nome.touched && f.nome.errors?.['required']) {
+            <p class="text-red-500 text-sm">
+                Nome é obrigatório.
+            </p>
+            }
+
+            @if (f.nome.touched && f.nome.errors?.['minlength']) {
+            <p class="text-red-500 text-sm">
+                Nome deve ter no mínimo 3 caracteres.
+            </p>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">E-mail</label>
+
+            <input pInputText type="email" formControlName="email" placeholder="Digite seu e-mail" />
+
+            @if (f.email.touched && f.email.errors?.['required']) {
+            <p class="text-red-500 text-sm">
+                E-mail é obrigatório.
+            </p>
+            }
+
+            @if (f.email.touched && f.email.errors?.['email']) {
+            <p class="text-red-500 text-sm">
+                Digite um e-mail válido.
+            </p>
+            }
+        </div>
+        } @else {
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">Nome da instituição:</label>
+
+            <input pInputText type="text" formControlName="nome" placeholder="“Hospital Walfredo Gurgel”" />
+
+            @if (f.nome.touched && f.nome.errors?.['required']) {
+            <p class="text-red-500 text-sm">
+                Nome é obrigatório.
+            </p>
+            }
+
+            @if (f.nome.touched && f.nome.errors?.['minlength']) {
+            <p class="text-red-500 text-sm">
+                Nome deve ter no mínimo 3 caracteres.
+            </p>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">E-mail</label>
+
+            <input pInputText type="email" formControlName="email" placeholder="“hospital@gmail.com”" />
+
+            @if (f.email.touched && f.email.errors?.['required']) {
+            <p class="text-red-500 text-sm">
+                E-mail é obrigatório.
+            </p>
+            }
+
+            @if (f.email.touched && f.email.errors?.['email']) {
+            <p class="text-red-500 text-sm">
+                Digite um e-mail válido.
+            </p>
+            }
+        </div>
+        }
+
+    </div>
+
+    <!-- ================= DATA + TELEFONE ================= -->
+    <div class="flex gap-4">
+
+        @if (tipoUsuario === 'profissional') {
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="font-light text-[#020035] text-[18px]">
+                Data de nascimento:
+            </label>
+
+            <div class="relative">
+                <p-datepicker appendTo="body" styleClass="w-full" inputStyleClass="w-full" dateFormat="dd/mm/yy"
+                    placeholder="Insira a data de nascimento" [iconDisplay]="'input'" [showIcon]="true"
+                    formControlName="dataNascimento">
+                </p-datepicker>
+            </div>
+        </div>
+        }
+
+        @if (tipoUsuario === 'instituicao') {
+        <div class="flex flex-col gap-2.5 w-full">
+            <label class="text-[#020035] text-[18px]">CNPJ</label>
+
+            <input pInputText type="text" formControlName="cnpj" placeholder="00.000.000/0000-00" maxlength="18" />
+
+            @if (f.cnpj.touched && f.cnpj.errors?.['required']) {
+            <p class="text-red-500 text-sm">
+                CNPJ é obrigatório para instituições.
+            </p>
+            }
+
+            @if (f.cnpj.touched && f.cnpj.errors?.['cnpjFormatoInvalido']) {
+            <p class="text-red-500 text-sm">
+                CNPJ deve conter 14 números.
+            </p>
+            }
+
+            @if (f.cnpj.touched && f.cnpj.errors?.['cnpjInvalido']) {
+            <p class="text-red-500 text-sm">
+                CNPJ inválido.
+            </p>
+            }
+        </div>
+        }
+
+        <!-- Campo TELEFONE no template -->
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">Telefone</label>
+
+            <input pInputText type="phone" formControlName="telefone" placeholder="(99) 99999-9999" />
+
+            @if (f.telefone.touched && f.telefone.errors?.['required']) {
+            <p class="text-red-500 text-sm">
+                Telefone é obrigatório.
+            </p>
+            }
+
+            @if (f.telefone.touched && f.telefone.errors?.['telefoneFormatoInvalido']) {
+            <p class="text-red-500 text-sm">
+                Telefone deve conter 11 números (ex: 11999999999).
+            </p>
+            }
+        </div>
+
+    </div>
+
+    <!-- ================= SENHA + CONFIRMAR SENHA ================= -->
+    <div class="flex gap-4">
+
+        <!-- SENHA -->
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="font-light text-[#020035] text-[18px]">
+                Senha:
+            </label>
+
+            <p-password formControlName="senha" [toggleMask]="true" [feedback]="false"
+                placeholder="No mínimo 6 caracteres" styleClass="w-full" inputStyleClass="w-full"></p-password>
+
+            @if (f.senha.touched && f.senha.errors?.['minlength']) {
+            <p class="text-red-500 text-sm">
+                Senha deve ter no mínimo 6 caracteres.
+            </p>
+            }
+        </div>
+
+
+        <!-- CONFIRMAR SENHA -->
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="font-light text-[#020035] text-[18px]">
+                Confirmar senha:
+            </label>
+
+            <p-password formControlName="confirmarSenha" [toggleMask]="true" [feedback]="false"
+                placeholder="Digite novamente a senha" styleClass="w-full" inputStyleClass="w-full"></p-password>
+        </div>
+
+
+    </div>
+
+    <!-- ================= ERRO ================= -->
+    @if (erroCadastro) {
+    <p class="text-red-500 text-sm text-center">
+        {{ erroCadastro }}
+    </p>
+    }
+
+    <!-- ================= BOTÃO ================= -->
+    <button type="button" (click)="proximo()" class="w-full py-3 bg-blue-600 hover:bg-blue-700
+           text-white font-semibold rounded-[50px] transition-all mt-5">
+        Próximo
+    </button>
+    <div class="mb-8 mt-9 flex items-center gap-4">
+        <div class="h-2 w-1/2 rounded-full bg-gray-300"></div>
+        <div class="h-2 w-1/2 rounded-full bg-[#020035]"></div>
+        <div class="h-2 w-1/2 rounded-full bg-gray-300"></div>
+    </div>
+</form>

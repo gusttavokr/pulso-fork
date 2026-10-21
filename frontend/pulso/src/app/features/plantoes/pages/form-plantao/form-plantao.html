@@ -1,0 +1,237 @@
+<div class="mb-6 mt-4 font-normal text-[#A3A3A3]">
+    <p-breadcrumb [model]="items" [home]="home" styleClass="bg-[#F6F8FE] p-[0]" />
+</div>
+
+<div class="flex gap-6 items-start max-w-362.5 mr-10">
+    <div class="w-full flex flex-col bg-[#ffffff]! text-[#020035]! p-8 rounded-xl">
+        @if (step() === 1 ) {
+        <div (click)="voltarTudo()">
+            <svg width="28" height="28" class="cursor-pointer
+         hover:scale-110 transition" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M28.5012 15.9994C28.5012 16.3972 28.3431 16.7788 28.0618 17.0601C27.7805 17.3414 27.399 17.4994 27.0012 17.4994H8.62618L15.0662 23.9381C15.348 24.2199 15.5063 24.6021 15.5063 25.0006C15.5063 25.3992 15.348 25.7814 15.0662 26.0631C14.7844 26.3449 14.4022 26.5033 14.0037 26.5033C13.6052 26.5033 13.223 26.3449 12.9412 26.0631L3.94118 17.0631C3.80134 16.9238 3.69039 16.7582 3.61468 16.5759C3.53897 16.3935 3.5 16.1981 3.5 16.0006C3.5 15.8032 3.53897 15.6077 3.61468 15.4254C3.69039 15.2431 3.80134 15.0775 3.94118 14.9381L12.9412 5.93815C13.0807 5.79862 13.2464 5.68794 13.4287 5.61243C13.611 5.53691 13.8064 5.49805 14.0037 5.49805C14.201 5.49805 14.3964 5.53691 14.5787 5.61243C14.761 5.68794 14.9267 5.79862 15.0662 5.93815C15.2057 6.07768 15.3164 6.24332 15.3919 6.42563C15.4674 6.60793 15.5063 6.80332 15.5063 7.00065C15.5063 7.19797 15.4674 7.39337 15.3919 7.57567C15.3164 7.75797 15.2057 7.92362 15.0662 8.06315L8.62618 14.4994H27.0012C27.399 14.4994 27.7805 14.6574 28.0618 14.9387C28.3431 15.22 28.5012 15.6016 28.5012 15.9994Z"
+                    fill="#020035" />
+            </svg>
+        </div>
+        } @else {
+        <div (click)="back()">
+            <svg width="28" height="28" class="cursor-pointer
+         hover:scale-110 transition" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M28.5012 15.9994C28.5012 16.3972 28.3431 16.7788 28.0618 17.0601C27.7805 17.3414 27.399 17.4994 27.0012 17.4994H8.62618L15.0662 23.9381C15.348 24.2199 15.5063 24.6021 15.5063 25.0006C15.5063 25.3992 15.348 25.7814 15.0662 26.0631C14.7844 26.3449 14.4022 26.5033 14.0037 26.5033C13.6052 26.5033 13.223 26.3449 12.9412 26.0631L3.94118 17.0631C3.80134 16.9238 3.69039 16.7582 3.61468 16.5759C3.53897 16.3935 3.5 16.1981 3.5 16.0006C3.5 15.8032 3.53897 15.6077 3.61468 15.4254C3.69039 15.2431 3.80134 15.0775 3.94118 14.9381L12.9412 5.93815C13.0807 5.79862 13.2464 5.68794 13.4287 5.61243C13.611 5.53691 13.8064 5.49805 14.0037 5.49805C14.201 5.49805 14.3964 5.53691 14.5787 5.61243C14.761 5.68794 14.9267 5.79862 15.0662 5.93815C15.2057 6.07768 15.3164 6.24332 15.3919 6.42563C15.4674 6.60793 15.5063 6.80332 15.5063 7.00065C15.5063 7.19797 15.4674 7.39337 15.3919 7.57567C15.3164 7.75797 15.2057 7.92362 15.0662 8.06315L8.62618 14.4994H27.0012C27.399 14.4994 27.7805 14.6574 28.0618 14.9387C28.3431 15.22 28.5012 15.6016 28.5012 15.9994Z"
+                    fill="#020035" />
+            </svg>
+        </div>
+        }
+
+        <div class="flex gap-4 items-center mt-5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="63" height="72" viewBox="0 0 24 24" fill="none"
+                stroke="#2D69FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-alarm-clock-check-icon lucide-alarm-clock-check">
+                <circle cx="12" cy="13" r="8" />
+                <path d="M5 3 2 6" />
+                <path d="m22 6-3-3" />
+                <path d="M6.38 18.7 4 21" />
+                <path d="M17.64 18.67 20 21" />
+                <path d="m9 13 2 2 4-4" />
+            </svg>
+
+            <div>
+                @if (isEdicao()) {
+                <p class="text-3xl font-bold text-[#020035]">Atualizando plantão</p>
+                } @else {
+                <p class="text-3xl font-bold text-[#020035]">Criando novo plantão</p>
+                }
+
+                @if (isEdicao()) {
+                <p class="text-1xl text-[#020035]">Preencha os campos abaixo para atualizar plantão.</p>
+                } @else {
+                <p class="text-1xl text-[#020035]">Preencha os campos abaixo para criar um novo plantão.</p>
+                }
+            </div>
+        </div>
+
+        @if (errorMessage()) {
+        <p class=" text-sm font-medium text-red-600">{{ errorMessage() }}</p>
+        }
+
+        @if (step() === 1) {
+
+        <form [formGroup]="form">
+            <div class="mt-8">
+                <div class="flex gap-5 items-center">
+                    <div class="flex-1">
+                        <p class="text-1xl font-medium text-[#020035]">Data de início:</p>
+                        <p-datepicker appendTo="body" styleClass="w-full" inputStyleClass="w-full" dateFormat="dd/mm/yy"
+                            placeholder="Selecione a data de início." [iconDisplay]="'input'" [showIcon]="true"
+                            formControlName="dataInicio">
+                        </p-datepicker>
+                        @if (hasError(form, 'dataInicio', 'required')) {
+                        <small class="text-red-600">Data de início é obrigatória.</small>
+                        }
+                        @if (hasError(form, 'dataInicio', 'dateInPast')) {
+                        <small class="text-red-600">A data não pode ser no passado.</small>
+                        }
+                    </div>
+
+
+                    <div class="flex-1">
+                        <p class="text-1xl font-medium text-[#020035]">Data de encerramento:</p>
+                        <p-datepicker appendTo="body" styleClass="w-full" inputStyleClass="w-full" dateFormat="dd/mm/yy"
+                            placeholder="Selecione a data de encerramento." [iconDisplay]="'input'" [showIcon]="true"
+                            formControlName="dataEncerramento">
+                        </p-datepicker>
+                        @if (hasError(form, 'dataInicio', 'required')) {
+                        <small class="text-red-600">Data de início é obrigatória.</small>
+                        }
+                        @if (hasError(form, 'dataInicio', 'dateInPast')) {
+                        <small class="text-red-600">A data não pode ser no passado.</small>
+                        }
+                        @if (form.hasError('dataEncerramentoAntesInicio') && form.touched) {
+                        <small class="text-red-600">
+                            A data de encerramento não pode ser anterior à data de início.
+                        </small>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <div class="flex gap-5 items-center">
+                    <div class="flex-1">
+                        <p class="text-1xl font-medium text-[#020035]">Hora de início:</p>
+
+                        <p-datepicker [iconDisplay]="'input'" [showIcon]="true" [timeOnly]="true" styleClass="w-full"
+                            inputStyleClass="w-full" panelStyleClass="time-panel-compact"
+                            placeholder="Selecione a hora de início." formControlName="horaInicio">
+
+                            <ng-template #inputicon let-clickCallBack="clickCallBack">
+                                <i class="pi pi-clock cursor-pointer" (click)="clickCallBack($event)"></i>
+                            </ng-template>
+                        </p-datepicker>
+
+                        @if (hasError(form, 'horaInicio', 'required')) {
+                        <small class="text-red-600">Hora de início é obrigatória.</small>
+                        }
+                        @if (hasError(form, 'horaInicio', 'invalidTime')) {
+                        <small class="text-red-600">Horário inválido.</small>
+                        }
+
+                    </div>
+
+                    <div class="flex-1">
+                        <p class="text-1xl font-medium text-[#020035]">Hora de encerramento:</p>
+
+                        <p-datepicker [iconDisplay]="'input'" [showIcon]="true" [timeOnly]="true" styleClass="w-full"
+                            inputStyleClass="w-full" placeholder="Selecione a hora de encerramento."
+                            formControlName="horaEncerramento">
+
+                            <ng-template #inputicon let-clickCallBack="clickCallBack">
+                                <i class="pi pi-clock cursor-pointer" (click)="clickCallBack($event)"></i>
+                            </ng-template>
+                        </p-datepicker>
+
+                        @if (hasError(form, 'horaInicio', 'required')) {
+                        <small class="text-red-600">Hora de início é obrigatória.</small>
+                        }
+                        @if (hasError(form, 'horaInicio', 'invalidTime')) {
+                        <small class="text-red-600">Horário inválido.</small>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <p class="text-1xl font-medium text-[#020035]">Observação:</p>
+                <textarea rows="5" class="w-full" pTextarea placeholder="Digite aqui as observações sobre o plantão."
+                    formControlName="comentario">
+                </textarea>
+                @if (form.controls.comentario.touched &&form.controls.comentario.hasError('minlength')) {
+                <small class="text-red-500">O comentário deve ter pelo menos 3 caracteres.
+                </small>
+                }
+            </div>
+        </form>
+        <div class="flex justify-end mt-5">
+            <app-button (click)="next()" label="Próximo passo" variant="confirmacao" [svgIcon]="svg" [iconSize]="26" />
+        </div>
+        }
+
+        @if (step() === 2) {
+        <form [formGroup]="form2">
+
+            <div class="mt-8">
+                <div class="flex gap-5 items-center">
+                    <div class="flex-1">
+                        <p class="text-1xl font-medium text-[#020035]">Quantidade de profissionais:</p>
+                        <input pInputText type="number" class="w-full"
+                            placeholder="Informe a quantidade de profissionais para o plantão."
+                            formControlName="quantidadeProfissionais">
+                        @if (hasError(form2, 'quantidadeProfissionais', 'required')) {
+                        <small class="text-red-600">Quantidade de profissionais é obrigatória.</small>
+                        }
+
+                        @if (hasError(form2, 'quantidadeProfissionais', 'min')) {
+                        <small class="text-red-600">Deve ser pelo menos 1 profissional.</small>
+                        }
+                    </div>
+
+                    <div class="flex-1">
+                        <p class="text-1xl font-medium text-[#020035]">Forma de pagamento:</p>
+                        <p-select [options]="formasPagamento" optionLabel="label" optionValue="value"
+                            placeholder="Selecione a forma de pagamento" class="w-full" appendTo="body"
+                            formControlName="formaPagamento">
+                        </p-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <div class="flex gap-5 items-center">
+                    <div class="flex-1">
+                        <p class="text-1xl font-medium text-[#020035]">Valor do plantão:</p>
+                        <p-inputNumber class="w-full" styleClass="w-full" inputStyleClass="w-full" mode="currency"
+                            currency="BRL" locale="pt-BR" placeholder="Informe o valor do plantão." [min]="0"
+                            formControlName="valor">
+                        </p-inputNumber>
+                        @if (hasError(form2, 'valor', 'min')) {
+                        <small class="text-red-600">O valor não pode ser negativo.</small>
+                        }
+                    </div>
+
+                    <div class="flex-1">
+                        <p class="text-1xl font-medium text-[#020035]">Estimativa pagamento:</p>
+                        <p-datepicker appendTo="body" styleClass="w-full" inputStyleClass="w-full" dateFormat="dd/mm/yy"
+                            placeholder="Selecione a data de pagamento." [iconDisplay]="'input'" [showIcon]="true"
+                            formControlName="estimativaPagamento">
+                        </p-datepicker>
+                        @if (hasError(form2, 'estimativaPagamento', 'dateInPast')) {
+                        <small class="text-red-600">
+                            A data de pagamento não pode ser no passado.
+                        </small>
+                        }
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="flex justify-end mt-5">
+            <app-button (click)="confirmar()" [label]="isEdicao() ? 'Atualizar plantão' : 'Criar plantão'"
+                variant="confirmacao" [svgIcon]="svg4" [iconSize]="26" />
+        </div>
+        }
+    </div>
+</div>
+
+<app-feedback-modal [visible]="sucesso()" type="success"
+    [modalTitle]="isEdicao() ? 'Plantão atualizado com sucesso!' : 'Plantão criado com sucesso!'"
+    message="Prossiga para detalhar o plantão criado." [animateIcon]="false" primaryLabel="Detalhar plantão"
+    [primarySvg]="svg2" (primaryClick)="onIrPlantao()" secondaryLabel="Página inicial" [secondarySvg]="svg3"
+    (secondaryClick)="onIrHome()" (closed)="fecharModal()">
+</app-feedback-modal>
+
+<app-feedback-modal [visible]="erro()" type="error"
+    [modalTitle]="isEdicao() ? 'Erro ao atualizar plantão' : 'Erro ao criar plantão'"
+    message="Tente novamente mais tarde." subMessage="Se o problema persistir, entre em contato com o suporte."
+    primaryLabel="Fechar" [primarySvg]="svg2" (primaryClick)="fecharModal()" secondaryLabel="Página inicial"
+    [secondarySvg]="svg3" (secondaryClick)="onIrHome()" (closed)="fecharModal()">
+</app-feedback-modal>

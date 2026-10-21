@@ -1,0 +1,66 @@
+.btn-base {
+  transition: all 0.2s ease;
+}
+
+.p-button {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* CONFIRMAÇÃO */
+
+.btn-confirmacao {
+  background: #2D69FF;
+  color: white;
+}
+
+.btn-confirmacao:hover:not(:disabled) {
+  background: #1E4FD8;
+}
+
+/* EXCLUIR */
+
+.btn-excluir {
+  background: #FF4141;
+  color: white;
+}
+
+.btn-excluir:hover:not(:disabled) {
+  background: #E63838;
+}
+
+/* BORDA */
+
+.btn-borda {
+  background: var(--btn-bg, #ffffff);
+  color: var(--btn-color, #020035);
+  border: 1px solid var(--btn-border, #020035);
+}
+
+.btn-borda:hover:not(:disabled) {
+  background: var(--btn-border);
+  color: var(--btn-bg);
+}
+
+.btn-borda svg {
+  fill: currentColor;
+}
+
+/* DISABLED */
+
+button:disabled,
+button.p-button:disabled {
+  background: #1F2937 !important;
+  border-color: #1F2937 !important;
+  cursor: not-allowed;
+}
+
+button:disabled .p-button-label {
+  color: #000000 !important;
+}
+
+button:disabled svg,
+button:disabled path {
+  fill: #000000 !important;
+}

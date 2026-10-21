@@ -1,0 +1,70 @@
+<p-card class="w-104.5 min-h-50 flex flex-col bg-[#ffffff]! text-[#020035]!">
+    <h2 class="text-xl font-bold flex items-center mb-1 gap-2">
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#2d69ff" viewBox="0 0 256 256">
+                <path
+                    d="M61.66,37.66l-32,32A8,8,0,0,1,18.34,58.34l32-32A8,8,0,0,1,61.66,37.66Zm176,20.68-32-32a8,8,0,0,0-11.32,11.32l32,32a8,8,0,0,0,11.32-11.32ZM224,136a96,96,0,1,1-96-96A96.11,96.11,0,0,1,224,136Zm-32,0a8,8,0,0,0-8-8H136V80a8,8,0,0,0-16,0v56a8,8,0,0,0,8,8h56A8,8,0,0,0,192,136Z">
+                </path>
+            </svg>
+        </span>
+        Carga-horária mensal
+    </h2>
+
+    <div class="flex items-center justify-between border-b border-gray-300 pb-2 mb-2"></div>
+
+    <div class="relative w-[full] h-3 bg-gray-200 rounded-full overflow-hidden mt-4">
+        <!-- Barra de fundo -->
+        <div class="absolute top-0 left-0 h-full bg-[#FFB200]" [style.width.%]="getProgressoSecundario()">
+        </div>
+
+        <!-- Barra interna -->
+        <div class="absolute top-0 left-0 h-full bg-[#21C694]" [style.width.%]="getCargaHoraria()">
+        </div>
+    </div>
+
+
+
+    <div class="mt-4 flex gap-4">
+        <div>
+            <h3 class="flex items-center gap-2 mb-1">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#21c694" viewBox="0 0 256 256">
+                        <path
+                            d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM205.66,85.66l-96,96a8,8,0,0,1-11.32,0l-40-40a8,8,0,0,1,11.32-11.32L104,164.69l90.34-90.35a8,8,0,0,1,11.32,11.32Z">
+                        </path>
+                    </svg>
+                </span>
+                <span class="font-normal">Concluído</span>
+            </h3>
+            <span class="font-normal"> {{ getHorasConcluidas() }} horas ({{ getCargaHoraria() }}%)</span>
+        </div>
+        <div>
+            <h3 class="flex items-center gap-2 mb-1">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffb200" viewBox="0 0 256 256">
+                        <path
+                            d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z">
+                        </path>
+                    </svg>
+                </span>
+                <span class="font-normal">Pendente</span>
+            </h3>
+            <span class="font-normal"> {{ getHorasPendentes() }} horas ({{ getProgressoSecundario() }}%)</span>
+        </div>
+        <div>
+            <h3 class="flex items-center gap-2 mb-1">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#d9d9d9" viewBox="0 0 256 256">
+                        <path
+                            d="M224,48V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48Z">
+                        </path>
+                    </svg>
+                </span>
+                <span class="font-normal">Livre</span>
+            </h3>
+            <span class="font-normal"> {{ getHorasConcluidas() }} horas ({{ getCargaHoraria() }}%)</span>
+        </div>
+    </div>
+
+
+</p-card>

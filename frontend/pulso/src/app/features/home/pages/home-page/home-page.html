@@ -1,0 +1,21 @@
+<div class="mb-6 mt-4 font-normal text-[#A3A3A3]">
+    <p-breadcrumb [model]="items" [home]="home" styleClass="bg-[#F6F8FE] p-0" />
+</div>
+<h1 class="text-3xl font-bold mb-8 text-[#020035]">Bem-vindo(a) {{ nome }}!</h1>
+
+<div class="flex flex-wrap gap-4 mb-4">
+    <app-card-plantao-coberto></app-card-plantao-coberto>
+    <app-card-plantao-marcado></app-card-plantao-marcado>
+    <app-card-plantao-pendente></app-card-plantao-pendente>
+    <app-card-plantao-perdido></app-card-plantao-perdido>
+</div>
+
+<div class="flex flex-wrap gap-4">
+    @if (auth.isInstituicao) {
+    <app-card-profissionais-alocados></app-card-profissionais-alocados>
+    }
+    @else {
+    <app-card-proximo-plantao></app-card-proximo-plantao>
+    }
+    <app-card-progresso-mensal></app-card-progresso-mensal>
+</div>

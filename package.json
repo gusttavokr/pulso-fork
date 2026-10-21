@@ -1,0 +1,31 @@
+{
+  "name": "pulso",
+  "version": "1.0.0",
+  "description": "<img width=\"4096\" height=\"1027\" alt=\"Banner\" src=\"https://github.com/user-attachments/assets/4506b9f2-8028-4565-a84b-f72772e88c77\" />",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {
+    "playwright": "^1.60.0",
+    "playwright-core": "^1.60.0",
+    "undici-types": "^7.24.6"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@types/node": "^26.0.0"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tads-cnat/Pulso.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/tads-cnat/Pulso/issues"
+  },
+  "homepage": "https://github.com/tads-cnat/Pulso#readme"
+}

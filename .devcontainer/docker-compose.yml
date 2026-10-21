@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+  # ---------------------
+  # Banco de dados
+  # ---------------------
+  db:
+    image: postgres:17
+    container_name: pulso_db
+    restart: always
+    environment:
+      POSTGRES_USER: pulso_user
+      POSTGRES_PASSWORD: pulso_password
+      POSTGRES_DB: pulso_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - pulso_net
+
+  # ---------------------
+  # Backend (Spring Boot)
+  # ---------------------
+  api:
+    build:
+      context: ../
+      dockerfile: ./.docker/Dockerfile.back.dev
+    container_name: pulso_api
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../backend/pulso:/app
+      - maven-repo:/root/.m2
+    depends_on:
+      - db
+    networks:
+      - pulso_net
+
+  # ---------------------
+  # Frontend (Angular) — container do DevContainer
+  # ---------------------
+  web:
+    build:
+      context: ../
+      dockerfile: ./.docker/Dockerfile.front.dev
+    container_name: pulso_front
+    ports:
+      - "4200:4200"
+
+    # DevContainer monta aqui
+    volumes:
+      - ..:/workspaces/Pulso
+
+    command: sleep infinity
+    networks:
+      - pulso_net
+
+volumes:
+  db_data:
+  maven-repo:
+
+networks:
+  pulso_net:
+    driver: bridge

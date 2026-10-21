@@ -1,0 +1,87 @@
+<div class="relative w-full">
+
+    <div [class]="sidebarService.sidebarAberta()
+      ? 'fixed top-1/2 right-87.5 transform -translate-y-1/2 z-10 transition-all duration-500 ease-in-out'
+      : 'fixed top-1/2 right-0 transform -translate-y-1/2 z-10 transition-all duration-500 ease-in-out'">
+        <button (click)="inverterSidebar()"
+            class="p-2 rounded-l-lg bg-white hover:bg-gray-100 transition-colors cursor-pointer shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" [class.rotate-180]="sidebarService.sidebarAberta()" width="32" height="32"
+                viewBox="0 0 24 24" fill="none" stroke="#020035" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-left-icon lucide-chevron-left transition-transform duration-300 ease-in-out">
+                <path d="m15 18-6-6 6-6" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="fixed top-0 right-0 h-screen w-87.5 bg-[#2D69FF] px-7.5 py-11.5
+           overflow-y-auto z-0 shadow-lg transform transition-transform duration-500 ease-in-out"
+        [class.translate-x-full]="!sidebarService.sidebarAberta()">
+
+        <section class="secao-calendario">
+
+            <h2
+                class="flex items-center justify-center text-2xl font-inter font-bold text-white mb-6 pb-3 border-b border-white/20">
+                <svg class="w-8 h-8 mr-3" width="32" height="32" viewBox="0 0 32 32" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_1270_1466)">
+                        <path
+                            d="M27.3008 2.46154H23.5508V1.23077C23.5508 0.904349 23.4191 0.591298 23.1847 0.360484C22.9502 0.12967 22.6323 0 22.3008 0C21.9693 0 21.6513 0.12967 21.4169 0.360484C21.1825 0.591298 21.0508 0.904349 21.0508 1.23077V2.46154H8.55078V1.23077C8.55078 0.904349 8.41908 0.591298 8.18466 0.360484C7.95024 0.12967 7.6323 0 7.30078 0C6.96926 0 6.65132 0.12967 6.4169 0.360484C6.18248 0.591298 6.05078 0.904349 6.05078 1.23077V2.46154H2.30078C1.63774 2.46154 1.00186 2.72088 0.533014 3.18251C0.0641733 3.64413 -0.199219 4.27024 -0.199219 4.92308V29.5385C-0.199219 30.1913 0.0641733 30.8174 0.533014 31.279C1.00186 31.7407 1.63774 32 2.30078 32H27.3008C27.9638 32 28.5997 31.7407 29.0685 31.279C29.5374 30.8174 29.8008 30.1913 29.8008 29.5385V4.92308C29.8008 4.27024 29.5374 3.64413 29.0685 3.18251C28.5997 2.72088 27.9638 2.46154 27.3008 2.46154ZM12.3008 25.8462C12.3008 26.1726 12.1691 26.4856 11.9347 26.7164C11.7002 26.9473 11.3823 27.0769 11.0508 27.0769C10.7193 27.0769 10.4013 26.9473 10.1669 26.7164C9.93248 26.4856 9.80078 26.1726 9.80078 25.8462V17.9908L9.11016 18.3323C8.81345 18.4784 8.46995 18.5024 8.15524 18.3991C7.84053 18.2958 7.58039 18.0737 7.43203 17.7815C7.28368 17.4894 7.25926 17.1512 7.36417 16.8413C7.46907 16.5315 7.69469 16.2753 7.99141 16.1292L10.4914 14.8985C10.682 14.8045 10.8939 14.7602 11.1069 14.7696C11.3199 14.779 11.5268 14.8419 11.7082 14.9523C11.8895 15.0627 12.0391 15.2169 12.1428 15.4003C12.2466 15.5836 12.3009 15.7901 12.3008 16V25.8462ZM21.0508 24.6154C21.3823 24.6154 21.7002 24.7451 21.9347 24.9759C22.1691 25.2067 22.3008 25.5197 22.3008 25.8462C22.3008 26.1726 22.1691 26.4856 21.9347 26.7164C21.7002 26.9473 21.3823 27.0769 21.0508 27.0769H16.0508C15.8186 27.0769 15.5911 27.0133 15.3936 26.8931C15.1961 26.7729 15.0366 26.601 14.9327 26.3966C14.8289 26.1921 14.785 25.9633 14.8058 25.7356C14.8267 25.508 14.9115 25.2905 15.0508 25.1077L19.5477 19.2046C19.6499 19.0705 19.7233 18.9173 19.7633 18.7543C19.8033 18.5913 19.809 18.422 19.7801 18.2567C19.7512 18.0915 19.6884 17.9337 19.5953 17.7933C19.5023 17.6528 19.3812 17.5325 19.2392 17.4398C19.0973 17.3471 18.9377 17.284 18.7701 17.2542C18.6025 17.2244 18.4304 17.2287 18.2646 17.2668C18.0987 17.3048 17.9425 17.3758 17.8055 17.4755C17.6685 17.5751 17.5537 17.7012 17.468 17.8462C17.3883 17.9906 17.2801 18.1179 17.1497 18.2204C17.0193 18.323 16.8693 18.3988 16.7086 18.4434C16.548 18.488 16.3799 18.5005 16.2142 18.4801C16.0486 18.4597 15.8888 18.4068 15.7443 18.3246C15.5997 18.2424 15.4734 18.1325 15.3726 18.0014C15.2719 17.8704 15.1989 17.7208 15.1579 17.5615C15.1168 17.4022 15.1086 17.2364 15.1337 17.0739C15.1588 16.9114 15.2166 16.7555 15.3039 16.6154C15.7168 15.9118 16.3539 15.362 17.1164 15.0512C17.8789 14.7404 18.7243 14.686 19.5214 14.8963C20.3186 15.1066 21.023 15.57 21.5255 16.2146C22.028 16.8592 22.3005 17.649 22.3008 18.4615C22.3034 19.2642 22.0377 20.0454 21.5445 20.6846L18.5508 24.6154H21.0508ZM2.30078 9.84615V4.92308H6.05078V6.15385C6.05078 6.48027 6.18248 6.79332 6.4169 7.02413C6.65132 7.25495 6.96926 7.38462 7.30078 7.38462C7.6323 7.38462 7.95024 7.25495 8.18466 7.02413C8.41908 6.79332 8.55078 6.48027 8.55078 6.15385V4.92308H21.0508V6.15385C21.0508 6.48027 21.1825 6.79332 21.4169 7.02413C21.6513 7.25495 21.9693 7.38462 22.3008 7.38462C22.6323 7.38462 22.9502 7.25495 23.1847 7.02413C23.4191 6.79332 23.5508 6.48027 23.5508 6.15385V4.92308H27.3008V9.84615H2.30078Z"
+                            fill="white" />
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_1270_1466">
+                            <rect width="32" height="32" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+                Calendário
+            </h2>
+
+            <app-calendar-connection [isConnected]="isConnected()" (connect)="connectGoogleCalendar()"
+                (disconnect)="disconnectGoogleCalendar()">
+            </app-calendar-connection>
+
+            @if (isLoading()) {
+
+            <div class="flex flex-col justify-center items-center py-10">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-3"></div>
+                <p class="text-white text-sm">
+                    Carregando eventos...
+                </p>
+            </div>
+
+            }
+
+            @else if (grupos.length === 0) {
+            <div class="flex flex-col items-center justify-center py-10 text-white">
+                <svg class="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
+                </svg>
+                <p class="text-center text-sm">Nenhum evento encontrado</p>
+            </div>
+            }
+
+            @else {
+
+            @for (grupo of grupos; track $index) {
+
+            <app-calendar-event-group [data]="grupo.data" [itens]="grupo.itens">
+            </app-calendar-event-group>
+
+            }
+
+            @if (isConnected()) {
+            <app-button variant="excluir" label="Desconectar google agenda" [svgIcon]="svg" [iconSize]="26"
+                (click)="disconnectGoogleCalendar()"></app-button>
+            }
+
+            }
+
+        </section>
+
+    </div>
+
+</div>

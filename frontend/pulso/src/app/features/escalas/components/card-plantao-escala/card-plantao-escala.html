@@ -1,0 +1,20 @@
+<div (click)="handleClick($event)" class="w-full bg-[#2D69FF] rounded-[14px] justify-between p-4 text-white">
+    <div class="flex flex-col text-sm font-normal pb-2">
+        <span>#{{ plantao.id }} {{ labelEspecialidade() }}</span>
+    </div>
+
+    <div class="flex items-end justify-between">
+        <div class="flex gap-[-5px]">
+            @for (profissional of profissionaisVisiveis(); track $index) {
+            <img [src]="profissional.foto" alt="Foto do líder" class="w-8 h-8 rounded-full object-cover"
+                [class.-ml-3]="$index !== 0" />
+            }
+        </div>
+
+        @if (quantidadeProfissionais() > 3) {
+        <span class="text-sm font-semibold ml-1">
+            +{{ quantidadeProfissionais() - 3 }}...
+        </span>
+        }
+    </div>
+</div>

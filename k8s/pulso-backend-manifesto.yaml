@@ -1,0 +1,259 @@
+# ============================================================
+# Namespace — isola todos os recursos do Pulso no cluster.
+# Sem isso, tudo cairia no namespace "default", misturado
+# com outros projetos que rodem no mesmo cluster.
+# ============================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pulso-backend
+---
+# ============================================================
+# Secret — armazena credenciais sensíveis fora dos Deployments.
+# O k8s guarda em base64 internamente; os Pods leem via
+# secretKeyRef em vez de ter a senha escrita no YAML deles.
+# ============================================================
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pulso-db-secret
+  namespace: pulso-backend
+type: Opaque
+stringData:
+  POSTGRES_USER: pulso_user
+  POSTGRES_PASSWORD: pulso_password
+  POSTGRES_DB: pulso_db
+  # A URL já aponta para o nome do Service do postgres (pulso-db-svc),
+  # que é como os Pods se enxergam dentro do cluster via DNS interno.
+  SPRING_DATASOURCE_URL: jdbc:postgresql://pulso-db-svc:5432/pulso_db
+  SPRING_DATASOURCE_USERNAME: pulso_user
+  SPRING_DATASOURCE_PASSWORD: pulso_password
+---
+# ============================================================
+# PersistentVolumeClaim (PVC) — equivalente ao -v do docker run.
+# O PVC é um "pedido de disco" que o cluster atende com um
+# PersistentVolume real (pode ser EBS, disco local, etc.).
+# ============================================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc
+  namespace: pulso-backend
+spec:
+  accessModes:
+    - ReadWriteOnce   # montado em apenas 1 node por vez (padrão para bancos)
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pvc
+  namespace: pulso-backend
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+# ============================================================
+# Deployment Redis — descreve COMO o container deve rodar.
+# O Deployment garante que sempre haverá `replicas` cópias
+# rodando; se o Pod morrer, o k8s sobe outro automaticamente.
+# ============================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pulso-redis
+  namespace: pulso-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pulso-redis   # o Deployment gerencia Pods com esse label
+  template:
+    metadata:
+      labels:
+        app: pulso-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7
+          args: ["redis-server", "--appendonly", "yes"]   # persistência em disco
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis-pvc   # liga o PVC declarado acima
+---
+# ============================================================
+# Service Redis — expõe o Pod internamente no cluster.
+# Outros Pods alcançam o Redis pelo hostname "pulso-redis-svc"
+# em vez de precisar saber o IP do Pod (que muda a cada restart).
+# ============================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: pulso-redis-svc
+  namespace: pulso-backend
+spec:
+  selector:
+    app: pulso-redis   # roteia tráfego para Pods com esse label
+  ports:
+    - port: 6379
+      targetPort: 6379
+---
+# ============================================================
+# Deployment Postgres
+# ============================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pulso-db
+  namespace: pulso-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pulso-db
+  template:
+    metadata:
+      labels:
+        app: pulso-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          ports:
+            - containerPort: 5432
+          env:
+            # Puxa os valores do Secret em vez de escrever a senha aqui
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: pulso-db-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pulso-db-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: pulso-db-secret
+                  key: POSTGRES_DB
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-pvc
+---
+# Service Postgres — interno apenas, nenhuma porta exposta pra fora do cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: pulso-db-svc
+  namespace: pulso-backend
+spec:
+  selector:
+    app: pulso-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+# ============================================================
+# Deployment Backend Spring Boot
+# ============================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pulso-backend
+  namespace: pulso-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pulso-backend
+  template:
+    metadata:
+      labels:
+        app: pulso-backend
+    spec:
+      containers:
+        - name: pulso-backend
+          image: pulsoifrn/pulso-backend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pulso-db-secret
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: pulso-db-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pulso-db-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+            # Aponta pro Service do Redis pelo nome DNS interno
+            - name: SPRING_DATA_REDIS_HOST
+              value: pulso-redis-svc
+            - name: SPRING_DATA_REDIS_PORT
+              value: "6379"
+---
+# ============================================================
+# Service Backend — tipo ClusterIP (padrão): só acessível
+# dentro do cluster. Quem expõe pra fora é o Ingress abaixo.
+# ============================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: pulso-backend-svc
+  namespace: pulso-backend
+spec:
+  selector:
+    app: pulso-backend
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+# ============================================================
+# Ingress — é o equivalente a um proxy reverso (pense no Nginx
+# na frente da aplicação). Ele recebe o tráfego externo na
+# porta 80 e encaminha pro Service correto dentro do cluster.
+#
+# O k3s já vem com o Traefik como Ingress Controller padrão,
+# zero configuração extra necessária.
+# ============================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pulso-ingress
+  namespace: pulso
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pulso-backend-svc
+                port:
+                  number: 8080

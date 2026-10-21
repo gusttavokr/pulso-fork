@@ -1,0 +1,22 @@
+@if (mostrarLayout()) {
+<div class="flex h-screen overflow-hidden px-2.5">
+  <app-sidebar class="w-[320px] shrink-0"></app-sidebar>
+
+  <div class="flex flex-col flex-1 transition-all duration-300"
+    [ngClass]="{ 'mr-11': sidebarService.sidebarAberta(), 'mr-0': !sidebarService.sidebarAberta() }">
+    <app-header></app-header>
+
+    <div class="flex-1 overflow-auto pl-3">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <app-sidebar-calendario class="transition-all duration-300" [class.w-[300px]]="sidebarService.sidebarAberta()"
+    [class.w-0]="!sidebarService.sidebarAberta()">
+  </app-sidebar-calendario>
+</div>
+} @else {
+<div class="flex h-screen overflow-auto">
+  <router-outlet></router-outlet>
+</div>
+}

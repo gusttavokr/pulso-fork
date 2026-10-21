@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: pulso
+
+  datasource:
+    # Como você está usando a classe BaseTestContainers com @DynamicPropertySource,
+    # a URL abaixo é apenas um fallback. O driver DEVE ser o padrão do Postgres.
+    url: jdbc:postgresql://localhost:5432/pulso
+    username: test
+    password: test
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: never
+
+  # Desativa a segurança se não for testar autenticação agora
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
+# Configurações de Log para reduzir a verbosidade (como você pediu)
+logging:
+  level:
+    root: WARN
+    web.pulso: INFO
+    org.springframework: WARN
+    org.hibernate.SQL: INFO
+    org.testcontainers: INFO
+    org.springframework.boot.autoconfigure.logging: ERROR
+
+jwt:
+  private:
+    key: "classpath:app.key"
+  public:
+    key: "classpath:app.pub"
+
+# Evita erros de placeholder em outros serviços
+google:
+  oauth:
+    client-id: test-id
+    client-secret: test-secret
+    redirect-uri: http://localhost:4200/callback
+
+openapi:
+  server-url: http://localhost:8080
+
+account:
+  cors:
+    allowed-origin-patterns: ${CORS_ALLOWED_ORIGIN_PATTERNS:*}

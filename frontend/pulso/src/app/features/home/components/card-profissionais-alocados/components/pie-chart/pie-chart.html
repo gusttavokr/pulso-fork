@@ -1,0 +1,19 @@
+<svg viewBox="-50 -50 100 100" width="120" height="120" class="block">
+
+    <circle cx="0" cy="0" r="40" fill="#ffffff"></circle>
+
+    @if (naoAlocadosPath) {
+        <path [attr.d]="naoAlocadosPath" fill="#dbe7ff" stroke="none">
+        </path>
+    }
+
+    @if (alocadosPath) {
+        <path [attr.d]="alocadosPath" fill="#2d69ff" stroke="none">
+        </path>
+    }
+
+    @if(dividerAngleRad !== null) {
+    <line x1="0" y1="0" [attr.x2]="dividerX" [attr.y2]="dividerY" [attr.stroke]="dividerColor" stroke-width="2" />
+    }
+
+</svg>

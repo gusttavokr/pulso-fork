@@ -1,0 +1,34 @@
+<div class="flex gap-3.5 items-start pl-5">
+    <!-- Sidebar -->
+    <div class="w-70 flex flex-col border-r border-[#2D69FF]/15 h-screen overflow-hidden pt-8">
+
+        <!-- Informações do usuário -->
+
+        <!-- Foto de perfil -->
+        <img [src]="auth.fotoPerfil" [alt]="auth.nome"
+            class="w-32 h-32 rounded-full border-8 border-[#2D69FF] object-cover">
+
+
+        <div class="flex flex-col">
+            <h3 class="font-bold text-[18px] text-[#020035] mt-2.5">{{ auth.nome }}</h3>
+            <p class="font-normal text-[#020035]">{{ auth.especialidade }}</p>
+        </div>
+
+        <!-- Barra de progresso -->
+        <div class="mt-4 flex flex-col gap-2 mb-4">
+            <div class="w-64 bg-gray-200 rounded-full h-2.5">
+                <div class="h-2.5 bg-[#21C694] rounded-full" [style.width.%]="cargaHoraria">
+                </div>
+            </div>
+
+            <p class="body-rg text-[#020035]">Carga horária: {{ cargaHoraria }}%</p>
+        </div>
+
+
+        <!-- Menu de navegação -->
+        <div class="flex-1 overflow-y-auto pb-4">
+            <app-navigation></app-navigation>
+        </div>
+    </div>
+
+</div>

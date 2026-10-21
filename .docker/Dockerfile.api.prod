@@ -1,0 +1,24 @@
+FROM maven:3.9.6-eclipse-temurin-21-jammy AS build
+WORKDIR /app
+
+COPY ../backend/pulso/pom.xml ./
+COPY ../backend/pulso/mvnw ./
+COPY ../backend/pulso/.mvn ./.mvn
+
+RUN chmod +x mvnw
+
+RUN ./mvnw dependency:go-offline -B
+
+COPY ../backend/pulso/src ./src
+RUN ./mvnw clean package -DskipTests
+
+
+FROM quay.io/wildfly/wildfly:latest-jdk21
+WORKDIR /app
+
+COPY --from=build /app/target/*.war /opt/jboss/wildfly/standalone/deployments/ROOT.war
+
+ENV SPRING_PROFILES_ACTIVE=prod \
+    TZ=America/Sao_Paulo
+
+EXPOSE 8080

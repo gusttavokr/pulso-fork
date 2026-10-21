@@ -1,0 +1,221 @@
+<form [formGroup]="form" class="flex flex-col gap-7.5">
+
+    <!-- ================= PROFISSIONAL ================= -->
+    @if (tipoUsuario === 'profissional') {
+
+    <!-- CRM + ESTADO CRM -->
+    <div class="flex gap-5">
+
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">CRM:</label>
+
+            <p-inputNumber formControlName="crm" mode="decimal" [useGrouping]="false" [minFractionDigits]="0"
+                [maxFractionDigits]="0" [max]="99999" inputId="crm" placeholder="Ex: 12345">
+            </p-inputNumber>
+
+            @if (form.get('crm')?.touched && form.get('crm')?.errors?.['required']) {
+            <p class="text-red-500 text-sm">CRM é obrigatório.</p>
+            }
+            @if (form.get('crm')?.touched && form.get('crm')?.errors?.['min']) {
+            <p class="text-red-500 text-sm">CRM deve ter no mínimo 4 caracteres.</p>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">Estado (UF):</label>
+
+            <p-select formControlName="estadoCrm" [options]="estadosBrasil" optionLabel="label" optionValue="value"
+                placeholder="Selecione" class="w-full" appendTo="body">
+            </p-select>
+
+            @if (form.get('estadoCrm')?.touched && form.get('estadoCrm')?.errors?.['required']) {
+            <p class="text-red-500 text-sm">Estado é obrigatório.</p>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="font-light text-[#020035] text-[18px]">Data de formação:</label>
+
+            <p-datepicker appendTo="body" styleClass="w-full" inputStyleClass="w-full" dateFormat="dd/mm/yy"
+                placeholder="Selecione a data" [iconDisplay]="'input'" [showIcon]="true" formControlName="dataFormacao">
+            </p-datepicker>
+
+            @if (form.get('dataFormacao')?.touched && form.get('dataFormacao')?.errors?.['required']) {
+            <p class="text-red-500 text-sm">Data de formação é obrigatória.</p>
+            }
+        </div>
+
+    </div>
+
+    <!-- DATA FORMAÇÃO + ESPECIALIDADE -->
+    <div class="flex gap-12.5">
+
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">Especialidade:</label>
+
+            <p-select formControlName="especialidade" [options]="especialidades" optionLabel="label" optionValue="value"
+                placeholder="Selecione" class="w-full h-11.25" appendTo="body">
+            </p-select>
+
+            @if (form.get('especialidade')?.touched && form.get('especialidade')?.errors?.['required']) {
+            <p class="text-red-500 text-sm">Especialidade é obrigatória.</p>
+            }
+        </div>
+
+    </div>
+
+    <!-- TIPO PIX + CHAVE PIX -->
+    <div class="flex gap-12.5">
+
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">Tipo de PIX:</label>
+
+            <p-select formControlName="tipoPix" [options]="tiposPix" optionLabel="label" optionValue="value"
+                placeholder="Selecione" class="w-full h-11.25" appendTo="body">
+            </p-select>
+
+            @if (form.get('tipoPix')?.touched && form.get('tipoPix')?.errors?.['required']) {
+            <p class="text-red-500 text-sm">Tipo de PIX é obrigatório.</p>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">Chave PIX</label>
+
+            <input pInputText type="text" formControlName="chavePix" placeholder="Digite a chave PIX" />
+
+            @if (form.get('chavePix')?.touched && form.get('chavePix')?.errors?.['required']) {
+            <p class="text-red-500 text-sm">Chave PIX é obrigatória.</p>
+            }
+            @if (form.get('chavePix')?.touched && form.get('chavePix')?.errors?.['minlength']) {
+            <p class="text-red-500 text-sm">Chave PIX deve ter no mínimo 5 caracteres.</p>
+            }
+        </div>
+
+    </div>
+    }
+
+    <!-- ================= INSTITUIÇÃO ================= -->
+    @if (tipoUsuario === 'instituicao') {
+
+    <div class="flex flex-col gap-7.5">
+
+        <!-- ENDEREÇO COMPLETO -->
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">
+                Endereço completo:
+            </label>
+
+            <input pInputText type="text" formControlName="enderecoCompleto"
+                placeholder="Rua Itaquara, 1234, bairro Pompeia" />
+
+            @if (form.get('enderecoCompleto')?.touched && form.get('enderecoCompleto')?.errors?.['required']) {
+            <p class="text-red-500 text-sm">
+                Endereço completo é obrigatório.
+            </p>
+            }
+        </div>
+
+        <!-- FOTO DO PERFIL -->
+        <div class="flex flex-col gap-1.5 w-full">
+            <label class="text-[#020035] text-[18px]">
+                Foto do perfil:
+            </label>
+
+            <!-- PRIME NG SÓ COMO ENGINE -->
+            <p-fileUpload #fu name="foto" accept="image/*" [customUpload]="true" [auto]="false" [multiple]="false"
+                [showUploadButton]="false" [showCancelButton]="false" (onSelect)="onFotoSelecionada($event)"
+                class="hidden"></p-fileUpload>
+
+            <!-- AREA VISUAL CONTROLADA POR VOCÊ -->
+
+            @if (!arquivoSelecionado) {
+            <div class="w-full h-65 p-5 flex flex-col items-center justify-center
+                  gap-3 bg-white border-2 border-dashed border-[#DFE4EA]
+                  rounded-[10px] text-center cursor-pointer
+                  hover:border-blue-500 transition-colors" (click)="fu.choose()" (drop)="onDrop($event)"
+                (dragover)="onDragOver($event)">
+
+                <svg class="w-12 h-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                    viewBox="0 0 256 256">
+                    <path
+                        d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34Zm-56,67.32a8,8,0,0,1-11.32,0L136,139.31V184a8,8,0,0,1-16,0V139.31l-10.34,10.35a8,8,0,0,1-11.32-11.32l24-24a8,8,0,0,1,11.32,0l24,24A8,8,0,0,1,157.66,149.66ZM152,88V44l44,44Z" />
+                </svg>
+
+                <p class="text-[#020035] text-[18px] font-medium">
+                    Arraste seus arquivos aqui
+                </p>
+
+                <p class="text-[#6B7280] text-sm">
+                    JPG, JPEG, PNG, SVG até 50MB
+                </p>
+
+                <div class="mt-2 px-6 py-2 text-black
+                    border border-[#D5D3E0]
+                    rounded-md font-medium text-sm">
+                    Selecionar arquivo
+                </div>
+            </div>
+
+            } @else {
+            <div class="bg-white p-6 flex rounded-xl transition cursor-pointer">
+                <div class="flex items-center flex-1 gap-4">
+                    <img [src]="previewImagem" alt="Foto do líder"
+                        class="w-22 h-22 rounded-full object-cover border-5 border-[#2D69FF]" />
+                    <div>
+                        <p class="font-bold text-lg">{{ nome() }}</p>
+                        <p class="text-md">{{ email() }}</p>
+                        <p class="text-md">{{ telefone() }}</p>
+                    </div>
+                </div>
+
+                <div class="justify-end hover:scale-110 transition" (click)="cancelarArquivo()">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24 8L8 24" stroke="#020035" stroke-width="2.66667" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M8 8L24 24" stroke="#020035" stroke-width="2.66667" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+            <p class="text-[#A8ABAE]">Modo de exibição</p>
+            }
+
+            @if (form.get('fotoPerfil')?.touched && form.get('fotoPerfil')?.errors?.['required']) {
+            <p class="text-red-500 text-sm">
+                Foto do perfil é obrigatória.
+            </p>
+            }
+        </div>
+
+    </div>
+    }
+
+    <!-- ================= ERRO GERAL ================= -->
+    @if (erroCadastro) {
+    <p class="text-red-500 text-sm text-center">
+        {{ erroCadastro }}
+    </p>
+    }
+
+    <!-- ================= BOTÃO ================= -->
+    <button type="button" (click)="finalizarCadastro()" class="w-full py-3 bg-blue-600 hover:bg-blue-700
+           text-white font-semibold rounded-[50px] transition-all">
+        Finalizar cadastro
+    </button>
+
+    <div class="mb-8 mt-9 flex items-center gap-4">
+        <div class="h-2 w-1/2 rounded-full bg-gray-300"></div>
+        <div class="h-2 w-1/2 rounded-full bg-gray-300"></div>
+        <div class="h-2 w-1/2 rounded-full bg-[#020035]"></div>
+    </div>
+</form>
+
+
+<app-feedback-modal [visible]="modalSucesso()" type="success" modalTitle="Cadastro concluído"
+    message="Seu cadastro foi finalizado com sucesso!" subMessage="Você será redirecionado para a página de login." (closed)="fecharModalSucesso()">
+</app-feedback-modal>
+
+<app-feedback-modal [visible]="modalErro()" type="error" modalTitle="Erro ao criar cadastro" message="Tente novamente mais tarde." subMessage="Se o problema persistir, entre em contato com o suporte." buttonLabel="Fechar" [buttonSvg]="svgFechar"
+    (closed)="fecharModalErro()">
+</app-feedback-modal>

@@ -1,0 +1,121 @@
+# name: CI/CD - Build, Push & Deploy Frontend
+
+# on:
+#   push:
+#     branches: 
+#       - main
+#       - develop
+#     paths:
+#       - 'frontend/**'
+#       - 'nginx/**'
+#       - '.docker/**'
+#       - '.github/workflows/**'
+#       - 'docker-compose-prod.yml'
+  
+# jobs:
+#   build:
+#     name: Build Docker Image - FrontEnd
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v4
+
+#     - name: Set up Docker Buildx
+#       uses: docker/setup-buildx-action@v3
+
+#     - name: Build Docker image
+#       uses: docker/build-push-action@v5
+#       with:
+#         context: .
+#         file: .docker/Dockerfile.web.prod
+#         push: false
+#         tags: pulsoifrn/pulso-frontend:latest
+#         cache-from: type=gha
+#         cache-to: type=gha,mode=max
+#         outputs: type=docker,dest=/tmp/pulso-web.tar
+
+#     - name: Upload image artifact
+#       uses: actions/upload-artifact@v4
+#       with:
+#         name: pulso-web-image
+#         path: /tmp/pulso-web.tar
+
+#   push:
+#     name: Push to Docker Hub
+#     runs-on: ubuntu-latest
+#     needs: build
+
+#     steps:
+#       - name: Download image artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: pulso-web-image
+#           path: /tmp
+
+#       - name: Load Docker image
+#         run: docker load --input /tmp/pulso-web.tar
+
+#       - name: Login to Docker Hub
+#         uses: docker/login-action@v3
+#         with:
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+#       - name: Push Docker image
+#         run: docker push pulsoifrn/pulso-frontend:latest
+          
+#   deploy:
+#     name: Deploy on EC2 - Frontend
+#     runs-on: ubuntu-latest
+#     needs: push
+  
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+  
+#       - name: Create deploy directory
+#         uses: appleboy/ssh-action@v1.0.3
+#         with:
+#           host: ${{ secrets.EC2_HOST_FRONTEND }}
+#           username: ${{ secrets.EC2_USERNAME }}
+#           key: ${{ secrets.EC2_SSH_KEY_FRONTEND }}
+#           script: |
+#             sudo mkdir -p /home/ubuntu/pulso/nginx
+#             sudo chown -R ubuntu:ubuntu /home/ubuntu/pulso
+      
+#             ls -ld /home/ubuntu/pulso
+#             ls -ld /home/ubuntu/pulso/nginx
+  
+#       - name: Copy compose file
+#         uses: appleboy/scp-action@v0.1.7
+#         with:
+#           host: ${{ secrets.EC2_HOST_FRONTEND }}
+#           username: ${{ secrets.EC2_USERNAME }}
+#           key: ${{ secrets.EC2_SSH_KEY_FRONTEND }}
+#           source: "docker-compose-prod.yml"
+#           target: "/home/ubuntu/pulso/"
+
+#       - name: Copy nginx config
+#         uses: appleboy/scp-action@v0.1.7
+#         with:
+#           host: ${{ secrets.EC2_HOST_FRONTEND }}
+#           username: ${{ secrets.EC2_USERNAME }}
+#           key: ${{ secrets.EC2_SSH_KEY_FRONTEND }}
+#           source: "nginx"
+#           target: "/home/ubuntu/pulso/"
+  
+#       - name: Deploy via SSH
+#         uses: appleboy/ssh-action@v1.0.3
+#         with:
+#           host: ${{ secrets.EC2_HOST_FRONTEND }}
+#           username: ${{ secrets.EC2_USERNAME }}
+#           key: ${{ secrets.EC2_SSH_KEY_FRONTEND }}
+#           script: |
+#             cd /home/ubuntu/pulso
+#             ls -la  
+#             docker pull pulsoifrn/pulso-frontend:latest
+#             docker compose -f docker-compose-prod.yml config
+#             docker compose -f docker-compose-prod.yml up -d --force-recreate web nginx
+#             docker image prune -f
+#             docker ps -a

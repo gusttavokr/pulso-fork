@@ -1,0 +1,82 @@
+<div class="flex w-screen h-screen bg-[#F6F8FE]">
+
+    <!-- Conteúdo principal -->
+    <div class="flex flex-col items-center justify-center w-1/2 p-8">
+
+        <!-- Botão Voltar -->
+        <div class="w-full max-w-170">
+            <button class="flex items-center gap-2 text-[#1F2A37] font-medium cursor-pointer hover:underline"
+                (click)="voltar()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="#1F2A37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-arrow-left">
+                    <path d="m12 19-7-7 7-7" />
+                    <path d="M19 12H5" />
+                </svg>
+
+                <span>Voltar</span>
+            </button>
+        </div>
+
+        <h2 class="font-black text-[80px] text-[#2D69FF]">
+            Cadastro
+        </h2>
+
+        @switch (resgatarPasso()) {
+
+        @case (1) {
+        <p class="font-light text-[#1F2A37] mb-8 text-center">
+            Você está se cadastrando como
+            <b class="font-semibold">profissional</b>
+            de saúde ou
+            <b class="font-semibold">instituição</b>?
+        </p>
+        }
+
+        @case (2) {
+        @if (regatarTipoUsuario() === 'profissional') {
+        <p class="font-light text-[#1F2A37] mb-8 text-center">
+            Preencha os dados do
+            <b class="font-semibold">Profissional</b>
+            : Etapa 2 de 3
+        </p>
+        } @else {
+        <p class="font-light text-[#1F2A37] mb-8 text-center">
+            Preencha os dados da
+            <b class="font-semibold">Instituição</b>
+            : Etapa 2 de 3
+        </p>
+        }
+        }
+
+        @case (3) {
+        @if (regatarTipoUsuario() === 'profissional') {
+        <p class="font-light text-[#1F2A37] mb-8 text-center">
+            Preencha os dados do
+            <b class="font-semibold">Profissional</b>
+            : Etapa 3 de 3
+        </p>
+        } @else {
+        <p class="font-light text-[#1F2A37] mb-8 text-center">
+            Preencha os dados da
+            <b class="font-semibold">Instituição</b>
+            : Etapa 3 de 3
+        </p>
+        }
+        }
+
+        }
+
+        <div class="w-full max-w-170">
+            <router-outlet></router-outlet>
+        </div>
+
+    </div>
+
+    <!-- Lado direito -->
+    <div class="w-1/2 h-full bg-[#2D69FF]
+           rounded-tl-[40px] rounded-bl-[40px]">
+        <img src="coracoes.svg" alt="coracoes" class="w-full h-full object-cover scale-x-[-1]" />
+    </div>
+
+</div>

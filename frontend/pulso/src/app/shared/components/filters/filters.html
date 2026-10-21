@@ -1,0 +1,91 @@
+<div class="w-87.5 rounded-xl bg-white shadow-md p-8 space-y-4">
+    <div class="flex items-center gap-3 border-b border-gray-300 pb-4">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.3333 6.6665H4" stroke="#21C694" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M16 25.3335H4" stroke="#21C694" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M18.6665 4V9.33333" stroke="#21C694" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M21.3335 22.6665V27.9998" stroke="#21C694" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M28 16H16" stroke="#21C694" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M28.0002 25.3335H21.3335" stroke="#21C694" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M27.9998 6.6665H18.6665" stroke="#21C694" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M10.6665 13.3335V18.6668" stroke="#21C694" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M10.6667 16H4" stroke="#21C694" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <p class="text-2xl font-bold text-[#020035]">Filtros</p>
+    </div>
+
+    <div>
+
+        @if (showVisualizer) {
+        <div class="flex flex-col gap-2">
+            <app-card-visualizer (filtroChange)="onFiltroChange($event)">
+            </app-card-visualizer>
+        </div>
+        }
+
+        @if (isPlantao) {
+
+        <div class="flex flex-col gap-2">
+            <app-filtro-data [resetTrigger]="resetTrigger()" (filtroChange)="onFiltroChange($event)">
+            </app-filtro-data>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <app-filtro-especialidade [resetTrigger]="resetTrigger()" (filtroChange)="onFiltroChange($event)">
+            </app-filtro-especialidade>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <app-filtro-preco [resetTrigger]="resetTrigger()" (filtroChange)="onFiltroChange($event)">
+            </app-filtro-preco>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <app-filtro-horario [resetTrigger]="resetTrigger()" (filtroChange)="onFiltroChange($event)">
+            </app-filtro-horario>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <app-filtro-categoria [resetTrigger]="resetTrigger()" (filtroChange)="onFiltroChange($event)">
+            </app-filtro-categoria>
+        </div>
+        }
+
+        @if (isEscala) {
+
+        <div class="flex flex-col gap-2">
+            <app-filtro-especialidade [resetTrigger]="resetTrigger()" (filtroChange)="onFiltroChange($event)">
+            </app-filtro-especialidade>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <app-filtro-mes-referencia [resetTrigger]="resetTrigger()" (filtroChange)="onFiltroChange($event)">
+            </app-filtro-mes-referencia>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <app-filtro-status-escala [resetTrigger]="resetTrigger()" (filtroChange)="onFiltroChange($event)">
+            </app-filtro-status-escala>
+        </div>
+        }
+
+    </div>
+
+    <div class="flex justify-between items-center">
+        <div class="flex justify-start">
+            <span (click)="limparFiltros()"
+                class="text-s text-[#848484] cursor-pointer hover:text-[#444444] transition-colors duration-200">Limpar
+                filtros</span>
+        </div>
+        <div class="flex justify-end">
+            <app-button (click)="aplicarFiltros()" label="Filtrar" variant="confirmacao" [svgIcon]="svg"
+                [iconSize]="26"></app-button>
+        </div>
+    </div>
+</div>

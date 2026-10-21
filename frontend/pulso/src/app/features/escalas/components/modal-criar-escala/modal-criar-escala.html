@@ -1,0 +1,138 @@
+<app-modal [visible]="visible" (closed)="close()" width="lg" [noPadding]="true">
+
+    <div modal-header class="flex items-center gap-4 p-10">
+
+        <svg width="63" height="72" viewBox="0 0 63 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M49.5 8.5H4.5C3.30653 8.5 2.16193 8.97411 1.31802 9.81802C0.474106 10.6619 0 11.8065 0 13V58C0 59.1935 0.474106 60.3381 1.31802 61.182C2.16193 62.0259 3.30653 62.5 4.5 62.5H49.5C50.6935 62.5 51.8381 62.0259 52.682 61.182C53.5259 60.3381 54 59.1935 54 58V13C54 11.8065 53.5259 10.6619 52.682 9.81802C51.8381 8.97411 50.6935 8.5 49.5 8.5ZM13.5 58H4.5V13H13.5V58ZM40.5 42.25H22.5C21.9033 42.25 21.331 42.0129 20.909 41.591C20.4871 41.169 20.25 40.5967 20.25 40C20.25 39.4033 20.4871 38.831 20.909 38.409C21.331 37.9871 21.9033 37.75 22.5 37.75H40.5C41.0967 37.75 41.669 37.9871 42.091 38.409C42.5129 38.831 42.75 39.4033 42.75 40C42.75 40.5967 42.5129 41.169 42.091 41.591C41.669 42.0129 41.0967 42.25 40.5 42.25ZM40.5 33.25H22.5C21.9033 33.25 21.331 33.0129 20.909 32.591C20.4871 32.169 20.25 31.5967 20.25 31C20.25 30.4033 20.4871 29.831 20.909 29.409C21.331 28.9871 21.9033 28.75 22.5 28.75H40.5C41.0967 28.75 41.669 28.9871 42.091 29.409C42.5129 29.831 42.75 30.4033 42.75 31C42.75 31.5967 42.5129 32.169 42.091 32.591C41.669 33.0129 41.0967 33.25 40.5 33.25Z"
+                fill="#2D69FF" />
+        </svg>
+
+        <div>
+            <h2 class="text-2xl font-bold text-[#020035]">
+                Criando nova escala
+            </h2>
+            <p class="text-gray-500">
+                Preencha as informações abaixo.
+            </p>
+        </div>
+
+    </div>
+
+    <div modal-body class="px-10">
+
+        @if (errorMessage()) {
+        <p class="mb-6 text-sm font-medium text-red-600">
+            {{ errorMessage() }}
+        </p>
+        }
+
+        @if (step() === 1) {
+        <form [formGroup]="form">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+
+                <div>
+                    <label class="block mb-2 font-semibold text-[#020035]">
+                        Nome da escala
+                    </label>
+
+                    <input pInputText type="text" formControlName="nome" placeholder="Ex: Escala Janeiro - UTI" class="w-full rounded-lg border border-gray-300 px-4 py-3
+                       text-gray-800 placeholder-gray-400
+                       focus:outline-none focus:ring-2 focus:ring-[#2D69FF]/40" />
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-semibold text-[#020035]">
+                        Instituição
+                    </label>
+
+                    <p-select formControlName="instituicaoId" [options]="instituicoes" optionLabel="nome"
+                        optionValue="id" placeholder="Selecione uma instituição"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-1 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2D69FF]/40"
+                        (onChange)="onInstChange()"></p-select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block mb-2 font-semibold text-[#020035]">
+                        Setor
+                    </label>
+
+                    <p-select formControlName="setorId" [options]="setoresDisponiveis" optionLabel="nome"
+                        optionValue="id" placeholder="Selecione um setor"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-1 text-gray-800 disabled:bg-gray-100 disabled:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D69FF]/40"
+                        [disabled]="!setoresDisponiveis.length"></p-select>
+                </div>
+
+            </div>
+
+        </form>
+
+        <div class="mb-8 flex gap-4">
+            <div class="h-2 w-1/2 bg-[#020035] rounded-full"></div>
+            <div class="h-2 w-1/2 bg-gray-300 rounded-full"></div>
+        </div>
+
+        }
+
+        @if (step() === 2) {
+        <form [formGroup]="form2">
+
+            <div class="grid gap-6 mb-10">
+
+                <div>
+                    <label class="block mb-2 font-semibold text-[#020035]">
+                        Mês de referência
+                    </label>
+
+                    <p-datepicker formControlName="mes" placeholder="Selecione o mês de referência da escala."
+                        view="month" dateFormat="mm/yy" [readonlyInput]="true" styleClass="w-full"
+                        [iconDisplay]="'input'" [showIcon]="true"
+                        inputStyleClass="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2D69FF]/40" />
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-semibold text-[#020035]">
+                        Copiar escala anterior?
+                    </label>
+
+                    <p-select formControlName="copia" [options]="[
+                        { label: 'Não', value: false },
+                        { label: 'Sim', value: true }
+                        ]" placeholder="Selecione"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-1 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2D69FF]/40"></p-select>
+                </div>
+
+            </div>
+
+        </form>
+
+        <div class="mb-8 flex gap-4">
+            <div class="h-2 w-1/2 bg-gray-300 rounded-full"></div>
+            <div class="h-2 w-1/2 bg-[#020035] rounded-full"></div>
+        </div>
+
+        }
+
+    </div>
+
+    <div modal-footer class="px-10 pb-10 flex justify-between">
+
+        @if (step() === 2) {
+        <app-button label="Voltar" variant="borda" (click)="back()" [svgIcon]="svg2" [iconSize]="26" />
+        }
+
+        <div class="ml-auto">
+            @if (step() === 1) {
+            <app-button (click)="next()" label="Próxima etapa" variant="confirmacao" [svgIcon]="svg1" [iconSize]="26" />
+            }
+
+            @if (step() === 2) {
+            <app-button (click)="create()" [label]="loading() ? 'Criando...' : 'Criar escala'" variant="confirmacao"
+                [svgIcon]="svg3" [iconSize]="26" />
+            }
+        </div>
+
+    </div>
+
+</app-modal>

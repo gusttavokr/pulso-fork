@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-4 flex-1 pb-3">
+
+    <div class="flex justify-between items-center gap-2">
+
+        <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-[#2d69ff]"></span>
+            <span class="text-base text-[#181827]">Alocados</span>
+        </div>
+
+        <div class="text-[#6b6b83] text-[14px]">
+            {{ percentAlocados | number:'1.2-2' }}%
+        </div>
+
+    </div>
+
+    <div class="flex justify-between items-center gap-2">
+
+        <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-[#dbe7ff]"></span>
+            <span class="text-base text-[#181827]">Não alocados</span>
+        </div>
+
+        <div class="text-[#6b6b83] text-[14px]">
+            {{ percentNaoAlocados | number:'1.2-2' }}%
+        </div>
+
+    </div>
+
+</div>

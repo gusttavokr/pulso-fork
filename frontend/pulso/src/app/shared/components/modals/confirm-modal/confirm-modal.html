@@ -1,0 +1,43 @@
+<app-modal [visible]="visible" (closed)="cancelar()" width="sm">
+
+    <div modal-header class="flex justify-center mb-6">
+
+        <div class="w-20 h-20 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" fill="#ff4141" viewBox="0 0 256 256">
+                <path
+                    d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z">
+                </path>
+            </svg>
+        </div>
+
+    </div>
+
+    <div modal-body>
+        <h3 class="text-2xl font-bold text-[#020035] text-center mb-3">
+            {{ title }}
+        </h3>
+
+        <p class="text-[#020035] text-center mb-8 text-lg">
+            {{ message }}
+            <br>
+            <span class="text-[#A3A3A3] text-base">
+                {{ subMessage }}
+            </span>
+        </p>
+
+    </div>
+
+    <div modal-footer class="flex items-center justify-between gap-4">
+
+        <app-button (click)="cancelar()" [label]="cancelLabel" variant="borda" [borderColors]="{
+                main: '#020035',
+                text: '#020035',
+                hover: '#F2F2F2',
+                background: '#F6F8FE'
+            }"></app-button>
+
+        <app-button (click)="confirmar()" [label]="confirmLabel" variant="excluir"></app-button>
+
+    </div>
+
+</app-modal>

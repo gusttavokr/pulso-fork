@@ -1,0 +1,17 @@
+@keyframes gearRotate {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+.gear-spin {
+    animation: gearRotate 9s linear infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+}

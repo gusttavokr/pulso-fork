@@ -1,0 +1,186 @@
+name: 🔒 Pulso Analysis
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  codeql:
+    name: 🔍 CodeQL SAST
+    runs-on: ubuntu-latest
+  
+    env:
+      CODEQL_JAVA_ARGS: "-Xmx4g"
+  
+    defaults:
+      run:
+        working-directory: backend/pulso
+  
+    steps:
+      - uses: actions/checkout@v4
+  
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+  
+      - name: Install CodeQL
+        run: |
+          wget -q https://github.com/github/codeql-cli-binaries/releases/latest/download/codeql-linux64.zip
+          unzip -q codeql-linux64.zip
+          echo "$PWD/codeql" >> $GITHUB_PATH
+  
+      - name: Download Java Query Pack
+        run: |
+          codeql pack download codeql/java-queries
+  
+      - name: Create CodeQL Database
+        run: |
+          codeql database create codeql-db \
+            --language=java \
+            --command="mvn -B clean package -DskipTests"
+  
+      - name: Debug Environment
+        run: |
+          free -h
+          nproc
+          codeql version
+  
+      - name: Run CodeQL Analysis
+        run: |
+          codeql database analyze \
+            --threads=2 \
+            --ram=6000 \
+            codeql-db \
+            codeql/java-queries:codeql-suites/java-security-extended.qls \
+            --format=sarif-latest \
+            --output=codeql-results.sarif
+  
+      - name: Upload SARIF Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeql-sarif
+          path: backend/pulso/codeql-results.sarif
+  
+  gemini-review:
+    name: 🤖 Gemini Security Review
+  
+    needs: codeql
+  
+    runs-on: ubuntu-latest
+  
+    defaults:
+      run:
+        working-directory: backend/pulso
+  
+    steps:
+      - uses: actions/checkout@v4
+  
+      - name: Download SARIF
+        uses: actions/download-artifact@v4
+        with:
+          name: codeql-sarif
+          path: backend/pulso
+  
+      - name: Analyze with Gemini
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -euo pipefail
+  
+          FINDINGS=$(jq '[.runs[].results[]]' codeql-results.sarif | jq 'length')
+  
+          echo "Findings encontrados: $FINDINGS"
+  
+          if [ "$FINDINGS" -eq 0 ]; then
+            echo "# Nenhuma vulnerabilidade encontrada" > analysis.md
+            exit 0
+          fi
+  
+          jq '{
+            findings: [
+              .runs[].results[] | {
+                ruleId,
+                level,
+                message: .message.text,
+                file: (
+                  .locations[0].physicalLocation.artifactLocation.uri // "unknown"
+                ),
+                line: (
+                  .locations[0].physicalLocation.region.startLine // 0
+                )
+              }
+            ]
+          }' codeql-results.sarif > findings.json
+  
+          jq '.findings[:100]' findings.json > findings-limited.json
+  
+          cat > prompt.txt << 'EOF'
+          Você é um especialista em AppSec e Secure Code Review.
+  
+          Analise os findings do CodeQL.
+  
+          Para cada finding:
+          - explique o problema
+          - explique o impacto
+          - classifique severidade
+          - indique possível falso positivo
+          - proponha correção
+  
+          Gere a resposta em Markdown com:
+  
+          # Resumo Executivo
+  
+          # Vulnerabilidades Críticas
+  
+          # Vulnerabilidades Altas
+  
+          # Vulnerabilidades Médias
+  
+          # Vulnerabilidades Baixas
+  
+          # Top 5 Recomendações
+          EOF
+  
+          jq -n \
+            --rawfile prompt prompt.txt \
+            --rawfile findings findings-limited.json \
+            '{
+              contents: [
+                {
+                  parts: [
+                    {
+                      text: ($prompt + "\n\n" + $findings)
+                    }
+                  ]
+                }
+              ]
+            }' > request.json
+  
+          curl -s \
+            -H "Content-Type: application/json" \
+            -X POST \
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$GEMINI_API_KEY" \
+            -d @request.json \
+            > response.json
+  
+          if jq -e '.error' response.json > /dev/null; then
+            echo "Erro retornado pela API Gemini:"
+            cat response.json
+            exit 1
+          fi
+  
+          jq -r '.candidates[0].content.parts[0].text' \
+            response.json > analysis.md
+  
+          test -s analysis.md
+  
+      - name: Upload AI Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pulso-security-report
+          path: backend/pulso/analysis.md
+

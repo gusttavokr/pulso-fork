@@ -1,0 +1,108 @@
+# name: CI/CD - Build, Push & Deploy Backend
+
+# on:
+#   push:
+#     branches:
+#       - main
+#       - develop
+#     paths:
+#       - 'backend/**'
+#       - '.docker/**'
+#       - 'k8s/**'
+#       - '.github/workflows/**'
+#       - 'docker-compose-prod.yml'
+
+# jobs:
+#   build:
+#     name: Build Docker Image - Backend
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository - Backend
+#         uses: actions/checkout@v4
+
+#       - name: Set up Docker Buildx - Backend
+#         uses: docker/setup-buildx-action@v3
+
+#       - name: Build Docker image - Backend
+#         uses: docker/build-push-action@v5
+#         with:
+#           context: .
+#           file: .docker/Dockerfile.api.prod
+#           push: false
+#           tags: pulsoifrn/pulso-backend:latest
+#           cache-from: type=gha
+#           cache-to: type=gha,mode=max
+#           outputs: type=docker,dest=/tmp/pulso-api.tar
+
+#       - name: Upload image artifact - Backend
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: pulso-api-image
+#           path: /tmp/pulso-api.tar
+
+#   push:
+#     name: Push to Docker Hub - Backend
+#     runs-on: ubuntu-latest
+#     needs: build
+
+#     steps:
+#       - name: Download image artifact - Backend
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: pulso-api-image
+#           path: /tmp
+
+#       - name: Load Docker image - Backend
+#         run: docker load --input /tmp/pulso-api.tar
+
+#       - name: Login to Docker Hub - Backend
+#         uses: docker/login-action@v3
+#         with:
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+#       - name: Push Docker image - Backend
+#         run: docker push pulsoifrn/pulso-backend:latest
+
+          
+#   deploy:
+#       name: Deploy on EC2 - Backend
+#       runs-on: ubuntu-latest
+#       needs: push
+  
+#       steps:
+#         - name: Checkout repository
+#           uses: actions/checkout@v4
+  
+#         - name: Copy docker-compose to VM
+#           uses: appleboy/scp-action@v0.1.7
+#           with:
+#             host: ${{ secrets.EC2_HOST }}
+#             username: ${{ secrets.EC2_USERNAME }}
+#             key: ${{ secrets.EC2_SSH_KEY }}
+#             source: "docker-compose-prod.yml"
+#             target: "~/pulso/"
+  
+#         - name: Install Docker if needed, pull image and restart backend
+#           uses: appleboy/ssh-action@v1.0.3
+#           with:
+#             host: ${{ secrets.EC2_HOST }}
+#             username: ${{ secrets.EC2_USERNAME }}
+#             key: ${{ secrets.EC2_SSH_KEY }}
+#             script: |
+#               if ! sudo docker info &> /dev/null; then
+#                 echo "Docker não encontrado, instalando..."
+#                 curl -fsSL https://get.docker.com -o get-docker.sh
+#                 sudo sh get-docker.sh
+#                 sudo usermod -aG docker $USER
+#                 rm get-docker.sh
+#               else
+#                 echo "Docker já instalado, pulando instalação."
+#               fi
+  
+#               cd ~/pulso
+#               sudo docker compose -f docker-compose-prod.yml pull api
+#               sudo docker compose -f docker-compose-prod.yml up -d db redis api
+
+      

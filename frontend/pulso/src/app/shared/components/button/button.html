@@ -1,0 +1,22 @@
+<button
+  pButton
+  [disabled]="disabled"
+  [ngClass]="['btn-base', 'btn-' + variant, buttonClass]"
+  [ngStyle]="styles()"
+  class="flex items-center gap-2 px-4 py-2 rounded-full transition-all"
+>
+
+  @if (showIcon()) {
+    <span
+      class="flex items-center justify-center shrink-0"
+      [style.width.px]="iconSize"
+      [style.height.px]="iconSize"
+      [innerHTML]="safeSvg"
+    ></span>
+  }
+
+  <span class="font-medium whitespace-nowrap">
+    {{ label }}
+  </span>
+
+</button>

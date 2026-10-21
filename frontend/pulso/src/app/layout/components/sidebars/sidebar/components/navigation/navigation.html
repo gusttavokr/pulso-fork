@@ -1,0 +1,67 @@
+<nav class="flex-1 flex flex-col gap-3 w-64 overflow-y-auto max-h-[calc(100vh-2rem)] pr-2">
+
+    @for (item of navItems; track item.label) {
+
+    @if (item.visible) {
+
+    @if (item.hasDropdown) {
+    <!-- Dropdown item -->
+    <div class="relative">
+        <div class="flex items-center py-1.5 px-4 text-base rounded-full cursor-pointer transition duration-200 group justify-between"
+            [ngClass]="item.isActive
+                          ? 'bg-blue-600 text-white font-normal'
+                          : 'text-[#020035] hover:bg-blue-600 hover:text-white'"
+            (click)="toggleDropdown(item); changeActive(item)">
+
+            <div class="flex items-center">
+                <svg class="fill-current w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                    <path [attr.d]="item.icon" />
+                </svg>
+
+                <span>{{ item.label }}</span>
+            </div>
+
+            <svg class="w-4 h-4 transition-transform duration-200" [class.rotate-180]="item.isOpen" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
+
+        @if (item.isOpen && item.subItems) {
+        <div class="ml-4 mt-1 space-y-1">
+            @for (subItem of item.subItems; track subItem.label) {
+            <div class="flex items-center py-1 px-2 rounded-full cursor-pointer hover:underline"
+                [routerLink]="subItem.href" (click)="item.isOpen = false">
+
+                <svg class="w-5 h-5 mr-2" viewBox="0 0 256 256">
+                    <path [attr.d]="subItem.icon" />
+                </svg>
+
+                <span>{{ subItem.label }}</span>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+    @else {
+    <!-- Normal item -->
+    <div class="flex items-center py-1.5 px-4 text-base rounded-full cursor-pointer transition duration-200 group"
+        [ngClass]="item.isActive
+                      ? 'bg-blue-600 text-white font-normal'
+                      : 'text-[#020035] hover:bg-blue-600 hover:text-white'" (click)="onItemClick(item)">
+
+        <svg class="fill-current w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+            <path [attr.d]="item.icon" />
+        </svg>
+
+        <span>{{ item.label }}</span>
+    </div>
+    }
+
+    }
+
+    }
+
+</nav>

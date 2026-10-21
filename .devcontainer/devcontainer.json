@@ -1,0 +1,37 @@
+{
+  "name": "Pulso Dev — Angular + Spring Boot",
+
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "web",
+
+  "workspaceFolder": "/workspaces/Pulso",
+
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2.12.4": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "angular.ng-template",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "redhat.java",
+        "vscjava.vscode-java-debug",
+        "vscjava.vscode-maven",
+        "vscjava.vscode-java-dependency",
+        "vscjava.vscode-spring-initializr",
+        "vscjava.vscode-java-pack",
+        "ms-azuretools.vscode-docker",
+        "cweijan.vscode-postgresql-client2",
+        "redhat.vscode-yaml",
+        "github.vscode-github-actions",
+        "ms-vscode-remote.remote-containers"
+      ]
+    }
+  },
+
+  "forwardPorts": [4200, 8080, 5432],
+
+  "postCreateCommand": "echo 'Ambiente de desenvolvimento Pulso carregado com sucesso!'"
+}

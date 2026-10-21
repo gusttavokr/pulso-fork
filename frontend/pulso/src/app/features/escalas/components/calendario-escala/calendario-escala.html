@@ -1,0 +1,27 @@
+<div class="mt-6 flex">
+    @for (dia of currentWeek(); track $index) {
+    <div class="flex-1 flex flex-col border-[#143886] p-3 items-center" [class.border-r]="$index !== 6"
+        [class.opacity-40]="dia.getMonth() !== mesReferencia.getMonth()">
+
+        <span class="text-2xl font-semibold">
+            {{ diasSemana[$index] }}
+        </span>
+
+        <span class="self-end text-lg text-[#848484] mt-1">
+            {{ dia.getDate() }}
+        </span>
+
+        <div class="mt-4 flex flex-col gap-2 w-full">
+            @for (shift of shiftsByDay().get($index); track shift.id) {
+            <app-card-plantao-escala [plantao]="shift" (clicked)="openShiftDetails($event, shift)" />
+            }
+        </div>
+
+    </div>
+    }
+</div>
+
+@if (isPopoverVisible() && selectedShift()) {
+<app-detalhe-plantao-popover [shift]="selectedShift()!" [position]="popoverPosition()" (closed)="closeShiftDetails()"
+    (viewDetails)="handleViewDetails($event)" />
+}

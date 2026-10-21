@@ -1,0 +1,88 @@
+<div class="rounded-xl bg-white shadow-md p-8 hover:shadow-lg transition">
+    <div class="pb-2 border-b border-gray-300 flex justify-between">
+        <div class="flex items-center gap-4">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_559_1245)">
+                    <path
+                        d="M46.5 39H45V24C45 23.2044 44.6839 22.4413 44.1213 21.8787C43.5587 21.3161 42.7957 21 42 21H31.5V9C31.5 8.20435 31.1839 7.44129 30.6213 6.87868C30.0587 6.31607 29.2956 6 28.5 6H10.5C9.70435 6 8.94129 6.31607 8.37868 6.87868C7.81607 7.44129 7.5 8.20435 7.5 9V39H6C5.60218 39 5.22064 39.158 4.93934 39.4393C4.65804 39.7206 4.5 40.1022 4.5 40.5C4.5 40.8978 4.65804 41.2794 4.93934 41.5607C5.22064 41.842 5.60218 42 6 42H46.5C46.8978 42 47.2794 41.842 47.5607 41.5607C47.842 41.2794 48 40.8978 48 40.5C48 40.1022 47.842 39.7206 47.5607 39.4393C47.2794 39.158 46.8978 39 46.5 39ZM24 39H15V30H24V39ZM24 19.5H21V22.5C21 22.8978 20.842 23.2794 20.5607 23.5607C20.2794 23.842 19.8978 24 19.5 24C19.1022 24 18.7206 23.842 18.4393 23.5607C18.158 23.2794 18 22.8978 18 22.5V19.5H15C14.6022 19.5 14.2206 19.342 13.9393 19.0607C13.658 18.7794 13.5 18.3978 13.5 18C13.5 17.6022 13.658 17.2206 13.9393 16.9393C14.2206 16.658 14.6022 16.5 15 16.5H18V13.5C18 13.1022 18.158 12.7206 18.4393 12.4393C18.7206 12.158 19.1022 12 19.5 12C19.8978 12 20.2794 12.158 20.5607 12.4393C20.842 12.7206 21 13.1022 21 13.5V16.5H24C24.3978 16.5 24.7794 16.658 25.0607 16.9393C25.342 17.2206 25.5 17.6022 25.5 18C25.5 18.3978 25.342 18.7794 25.0607 19.0607C24.7794 19.342 24.3978 19.5 24 19.5ZM42 39H31.5V24H42V39Z"
+                        fill="#21C694" />
+                </g>
+                <defs>
+                    <clipPath id="clip0_559_1245">
+                        <rect width="48" height="48" fill="white" />
+                    </clipPath>
+                </defs>
+            </svg>
+            <h1 class="text-2xl font-semibold text-[#020035]">{{ plantao.nomeInstituicao }}</h1>
+        </div>
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M30.1699 24.9912L19.0628 5.55368C18.8206 5.12634 18.4694 4.77089 18.045 4.52359C17.6206 4.27629 17.1382 4.146 16.647 4.146C16.1558 4.146 15.6734 4.27629 15.249 4.52359C14.8246 4.77089 14.4734 5.12634 14.2312 5.55368L3.12404 24.9912C2.87924 25.4151 2.75088 25.8963 2.75196 26.3858C2.75304 26.8754 2.88354 27.356 3.13021 27.7788C3.37688 28.2017 3.73097 28.5518 4.15658 28.7938C4.58219 29.0357 5.06419 29.1608 5.55372 29.1564H27.768C28.2552 29.1559 28.7337 29.0272 29.1554 28.7833C29.5771 28.5394 29.9273 28.1888 30.1706 27.7667C30.414 27.3447 30.5421 26.8661 30.542 26.3789C30.5418 25.8917 30.4135 25.4131 30.1699 24.9912Z"
+                [attr.fill]="corAlerta()" [attr.stroke]="corAlerta()" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M16.6606 12.4956V18.0492" stroke="white" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M16.6606 23.6025H16.6753" stroke="white" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+    </div>
+
+    <div class="flex justify-between items-stretch pt-3">
+        <div class="flex flex-col gap-3">
+            <div class="flex flex-wrap items-center gap-5">
+                <img [src]="plantao.fotoLider" alt="Foto do líder"
+                    class="w-10 h-10 rounded-full object-cover border-3 border-[#2D69FF]" />
+
+                <p class="text-[#020035]">
+                    <span class="font-bold">Líder:</span>
+                    {{ plantao.nomeLider }}
+                </p>
+
+                <div class="flex items-center gap-3 w-full lg:w-auto">
+                    <div [innerHTML]="iconeEspecialidade"></div>
+                    <p class="text-[#020035]">{{ labelEspecialidade }}</p>
+                </div>
+            </div>
+
+            <div class="text-[#020035]">
+                <p>
+                    <span class="font-bold">Data:</span>
+                    {{ plantao.horaEntrada | date:'dd/MM/yyyy' }} -
+                    {{ plantao.horaSaida | date:'dd/MM/yyyy' }}
+                </p>
+
+                <p>
+                    <span class="font-bold">Horário:</span>
+                    {{ plantao.horaEntrada | date:'HH:mm' }} -
+                    {{ plantao.horaSaida | date:'HH:mm' }}
+                    <span class="font-bold text-[#21C694]">
+                        (+{{ duracaoHoras() }}h)
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <div class="flex flex-col justify-between items-end gap-3 text-right">
+            <div>
+                @if (contexto === plantaoVisualizacaoContexto.PLANTOES_ABERTOS) {
+                @if (plantao.ehRepasse) {
+                <p-tag icon="pi pi-exclamation-triangle" severity="warn" value="Repasse"
+                    styleClass="bg-[#F6F0CB] text-[#111003] font-normal" />
+                } @else if (plantao.ehTroca) {
+                <p-tag icon="pi pi-exclamation-triangle" severity="info" value="Troca"
+                    styleClass="bg-[#DDE8FF] text-[#031035] font-normal" />
+                } @else if (plantao.ehNovoPlantao) {
+                <p-tag icon="pi pi-check" severity="success" value="Novo plantão!"
+                    styleClass="bg-[#CBF6E8] text-[#03110D] font-normal" />
+                }
+                }
+
+                <p class="text-1xl lg:text-2xl xl:text-3xl font-bold text-[#21C694]"> {{ plantao.estimativaValor |
+                    currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+            </div>
+
+            <app-button (click)="abrirPlantao()" label="Detalhar" variant="confirmacao" [svgIcon]="svg"
+                [iconSize]="26"></app-button>
+        </div>
+    </div>
+</div>

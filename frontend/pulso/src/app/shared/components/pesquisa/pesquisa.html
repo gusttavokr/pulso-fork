@@ -1,0 +1,13 @@
+<div class="card relative mb-8" styleClass="!bg-white">
+    <p-autocomplete placeholder="Buscar" [showClear]="true" [(ngModel)]="value" [suggestions]="items"
+        (completeMethod)="search($event)" fluid inputStyleClass="pl-12 !bg-[#ffffff] !text-[#020035] border-0">
+    </p-autocomplete>
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none w-6 h-6 text-[#020035]"
+        viewBox="0 0 24 24" fill="none" stroke="#020035" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="m21 21-4.34-4.34" />
+        <circle cx="11" cy="11" r="8" />
+    </svg>
+</div>
